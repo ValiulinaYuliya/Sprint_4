@@ -1,4 +1,4 @@
-package ru.practicum.qascooter;
+package ru.practicum.qascooter.pages;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;

@@ -1,18 +1,12 @@
 import org.junit.*;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
-import ru.practicum.qascooter.HomePage;
+import ru.practicum.qascooter.base.BaseTest;
 
-import java.time.Duration;
 
 @RunWith(Parameterized.class)
-public class FaqPageAnswersTest {
+public class FaqPageAnswersTest extends BaseTest {
 
-        private static WebDriver driver;
-        private static HomePage homePage;
         private final int questionNumber;
         private final String expectedAnswer;
 
@@ -20,6 +14,7 @@ public class FaqPageAnswersTest {
             this.questionNumber = questionNumber;
             this.expectedAnswer = expectedAnswer;
         }
+
         @Parameterized.Parameters
         public static Object[][] getAnswer() {
             return new Object[][] {
@@ -35,19 +30,10 @@ public class FaqPageAnswersTest {
         }
 
 
-    @BeforeClass
-    public static void setUp() {
-        ChromeOptions options = new ChromeOptions();
-        driver = new ChromeDriver(options);
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
-        homePage = new HomePage(driver);
-        homePage.open();
-        homePage.scrollDownEnd();
-        homePage.clickCookieButton();
-    }
 
     @Test
     public void testFaqAnswerText() {
+            System.out.println("Тест запущен");
             homePage.clickQuestionButton(questionNumber);
             String actualAnswer = homePage.getAnswerText(questionNumber);
 
@@ -58,11 +44,5 @@ public class FaqPageAnswersTest {
             );
     }
 
-    @AfterClass
-    public static void tearDown() {
-            if (driver != null) {
-                driver.quit();
-            }
-    }
-  
+
 }
