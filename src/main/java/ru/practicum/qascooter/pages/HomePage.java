@@ -18,19 +18,16 @@ public class HomePage {
 
     // локаторы
     public static final String PAGE_URL = "https://qa-scooter.praktikum-services.ru/";
-    private static final By ORDER_BUTTON_HEADER = By.xpath(".//*[@id='root']/div/div/div[1]/div[2]/button[1]");
-    private static final By ORDER_STATUS_BUTTON = By.cssSelector(".Header_Link__1TAG7");
-    private static final By SCOOTER_LOGO = By.cssSelector(".Header_Logo__23yGT");
-    private static final By LOGO_YANDEX = By.cssSelector(".Header_LogoYandex__3TSOI");
-    private static final By INPUT_NUMBER_ORDER = By.cssSelector(".Input_Input__1iN_Z Header_Input__xIoUq");
-    private static final By BUTTON_GO = By.cssSelector(".Button_Button__ra12g Header_Button__28dPO");
-    private static final By TEXT_ABOVE_LOGO = By.cssSelector(".Header_Disclaimer__3VEni");
-    private static final By ORDER_BUTTON_CENTER = By.xpath("//*[@id='root']/div/div[1]/div[4]/div[2]/div[5]/button");
-    private static final By BLOCK_QUESTIONS = By.xpath(".//*[@id='root']/div/div[1]/div[5]/div[1]");
-    private static final String QUESTION_SELECTOR = "div.accordion__item:nth-child(%d) > div > div.accordion__button";
-    private static final String ANSWER_SELECTOR = "div.accordion__item:nth-child(%d) .accordion__panel p";
-    private static final By COOKIE_CONTENT = By.className("App_CookieConsent__1yUIN");
-    private static final By COOKIE_BUTTON = By.className("App_CookieButton__3cvqF");
+    private static final By ORDER_BUTTON_HEADER = By.xpath(".//*[@id='root']/div/div/div[1]/div[2]/button[1]");//кнопка "Заказать" в шапке
+    private static final By ORDER_STATUS_BUTTON = By.cssSelector(".Header_Link__1TAG7");//кнопка "Статус заказа" в шапке
+    private static final By SCOOTER_LOGO = By.cssSelector(".Header_Logo__23yGT");//логотип Скутера
+    private static final By LOGO_YANDEX = By.cssSelector(".Header_LogoYandex__3TSOI");//логотип Яндекс
+    private static final By INPUT_NUMBER_ORDER = By.cssSelector(".Input_Input__1iN_Z Header_Input__xIoUq");//поле ввода номера заказа
+    private static final By BUTTON_GO = By.cssSelector(".Button_Button__ra12g Header_Button__28dPO");//кнопка "Go!"
+    private static final By ORDER_BUTTON_CENTER = By.xpath("//*[@id='root']/div/div[1]/div[4]/div[2]/div[5]/button");//кнопка "Заказать" в центре страницы
+    private static final String QUESTION_SELECTOR = "div.accordion__item:nth-child(%d) > div > div.accordion__button";//локатор для нажатия на вопрос
+    private static final String ANSWER_SELECTOR = "div.accordion__item:nth-child(%d) .accordion__panel p";//локатор для получения ответа
+    private static final By COOKIE_BUTTON = By.className("App_CookieButton__3cvqF");//кнопка принятия куки
 
     public HomePage(WebDriver driver) {
         this.driver = driver;
@@ -87,7 +84,7 @@ public class HomePage {
         return answerElement.getText();
     }
 
-
+    //Открытие страницы в браузере
     public void open() {
         driver.get("https://qa-scooter.praktikum-services.ru/");
     }
@@ -116,18 +113,10 @@ public class HomePage {
         driver.findElement(SCOOTER_LOGO).click();
     }
 
-    public String getTextAboveLogo() {
-        return driver.findElement(TEXT_ABOVE_LOGO).getText();
-    }
-
-
     public void clickOrderButtonCenter() {
         driver.findElement(ORDER_BUTTON_CENTER).click();
     }
 
-    public String getTextBlockQuestions() {
-        return driver.findElement(BLOCK_QUESTIONS).getText();
-    }
 
     /**
      * Прокручивает страницу до конца.
@@ -137,10 +126,6 @@ public class HomePage {
         logger.info("Прокрутили страницу до конца");
     }
 
-
-    public String getTextCookie() {
-        return driver.findElement(COOKIE_CONTENT).getText();
-    }
 
     public void clickCookieButton() {
         driver.findElement(COOKIE_BUTTON).click();

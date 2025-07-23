@@ -11,12 +11,9 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import ru.practicum.qascooter.pages.HomePage;
 import org.openqa.selenium.WebDriver;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
 
 import java.time.Duration;
-import java.util.Arrays;
-import java.util.Collection;
+
 
 @RunWith(Parameterized.class)
 public class BaseTest {
@@ -29,8 +26,8 @@ public class BaseTest {
     }
 
     @Parameterized.Parameters(name = "Запуск в браузере: {0}")
-    public static Collection<String> browsers() {
-        return Arrays.asList("chrome", "firefox");
+    public static Object[] browsers() {
+        return new Object[]{"chrome", "firefox"};
     }
 
     @Before
@@ -47,7 +44,7 @@ public class BaseTest {
             driver = new FirefoxDriver(options);
         }
 
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
         homePage = new HomePage(driver);
         homePage.open();
         homePage.scrollDownEnd();
