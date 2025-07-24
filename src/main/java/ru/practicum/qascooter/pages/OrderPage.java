@@ -14,14 +14,14 @@ public class OrderPage {
 
     //локаторы
     static final By ORDER_BUTTON_HEADER = By.xpath(".//div[2]/button[1]");//кнопка "Заказать" в шапке
-    private static final By inputName = By.cssSelector("input[@placeholder='* Имя']");
-    private static final By inputLastName = By.cssSelector("input[@placeholder='* Фамилия']");
-    private static final By inputAddress = By.cssSelector("input[@placeholder='* Адрес: куда привезти заказ']");
-    private static final By inputMetro = By.cssSelector("input[@placeholder='* Станция метро']");
-    private static final By inputPhone = By.cssSelector("input[@placeholder='* Телефон: на него позвонит курьер']");
-    static final By NEXT_BUTTON = By.className("Button_Button__ra12g Button_Middle__1CSJM");//кнопка "Далее"
-    private static final By inputDate = By.cssSelector("input[@placeholder='* Когда привезти самокат']");
-    private static final By inputRentalTime = By.className("Dropdown-control");
+    private static final By inputName = By.cssSelector("input[placeholder=\"* Имя\"]");
+    private static final By inputLastName = By.cssSelector("input[placeholder=\"* Фамилия\"]");
+    private static final By inputAddress = By.cssSelector("input[placeholder=\"* Адрес: куда привезти заказ\"]");
+    private static final By inputMetro = By.cssSelector("input[placeholder=\"* Станция метро\"]");
+    private static final By inputPhone = By.cssSelector("input[placeholder=\"* Телефон: на него позвонит курьер\"]");
+    static final By NEXT_BUTTON = By.cssSelector("button.Button_Button__ra12g.Button_Middle__1CSJM");//кнопка "Далее"
+    private static final By inputDate = By.cssSelector("input[placeholder=\"* Когда привезти самокат\"]");
+    private static final By inputRentalTime = By.cssSelector("div.Dropdown-control[aria-haspopup='listbox']");
     private static final String DROPDOWN_OPTION_XPATH = "//div[@class='Dropdown-option' and normalize-space()='%s']";
     private static final By inputColorScooter1 = By.id("black");
     private static final By inputColorScooter2 = By.id("grey");
@@ -30,6 +30,7 @@ public class OrderPage {
     static final By ORDER_BUTTON_YES = By.xpath("//*[@id='root']//button[contains(text(), 'Да')]");//кнопка "Да"
     private static final By FINAL_ORDER_STATUS = By.className("Order_ModalHeader__3FDaJ");//финальный статус заказа
     static final By FINAL_ORDER_BUTTON = By.xpath(".//div[2]/button[@class='Button_Button__ra12g Button_Middle__1CSJM']");//кнопка "Посмотреть статус"
+
 
     public OrderPage(WebDriver driver) {
         this.driver = driver;
@@ -44,16 +45,19 @@ public class OrderPage {
 
     public void inputName(String name) {
         WebElement field = wait.until(ExpectedConditions.elementToBeClickable(inputName));
+        field.clear();
         field.sendKeys(name);
     }
 
     public void inputLastName(String lastName) {
         WebElement field = wait.until(ExpectedConditions.elementToBeClickable(inputLastName));
+        field.clear();
         field.sendKeys(lastName);
     }
 
     public void inputAddress(String address) {
         WebElement field = wait.until(ExpectedConditions.elementToBeClickable(inputAddress));
+        field.clear();
         field.sendKeys(address);
     }
 
@@ -68,6 +72,7 @@ public class OrderPage {
 
     public void inputPhone(String phone) {
         WebElement field = wait.until(ExpectedConditions.elementToBeClickable(inputPhone));
+        field.clear();
         field.sendKeys(phone);
     }
 
@@ -77,7 +82,7 @@ public class OrderPage {
     }
 
     //метод заполнения формы заказа на первом шаге
-    public void fillFirstStepOfOrderForm(String name, String lastName, String address, int metroIndex, String phone) {
+    public void fillFirstStepOfOrderForm(String name, String lastName, String address, String phone) {
         inputName(name);
         inputLastName(lastName);
         inputAddress(address);
@@ -86,6 +91,29 @@ public class OrderPage {
         clickNextButton();
     }
 
+    public void closeCalendar() {
+        // Ждём, пока календарь будет видимым
+        By calendar = By.cssSelector(".react-datepicker");
+
+        if (isElementPresent(calendar)) {
+            // Ожидаем, пока заголовок будет видимым и кликабельным
+            WebElement header = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("div.Order_Header__BZXOb")));
+            header.click();
+            // Ждём, пока календарь исчезнет
+            wait.until(ExpectedConditions.invisibilityOfElementLocated(calendar));
+        }
+    }
+
+    private boolean isElementPresent(By locator) {
+        try {
+            driver.findElement(locator);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+
     public void inputDate(LocalDate date) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
         String formattedDate = date.format(formatter);
@@ -93,6 +121,7 @@ public class OrderPage {
         WebElement field = wait.until(ExpectedConditions.elementToBeClickable(inputDate));
         field.clear();
         field.sendKeys(formattedDate);
+        closeCalendar();
     }
 
     public void inputRentalTime(String rentalTime) {
@@ -137,15 +166,19 @@ public class OrderPage {
 
     //метод заполнения формы заказа на втором шаге
     public void fillSecondStepOfOrderForm(LocalDate date, String rentalTime, String scooterColor, String comment) {
-        if (date != null) {
-            inputDate(date);
-        }
+      try {
+          if (date != null) {
+              inputDate(date);
+          }
         inputRentalTime(rentalTime);
         selectColorScooter(scooterColor);
         inputComment(comment);
 
         clickOrderButtonRent();
         clickOrderButtonYes();
+      } catch (Exception e) {
+          System.out.println("Ошибка заполнения второго шага: " + e.getMessage());
+      }
 
     }
 

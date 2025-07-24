@@ -11,6 +11,8 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import ru.practicum.qascooter.pages.HomePage;
 import org.openqa.selenium.WebDriver;
+import ru.practicum.qascooter.pages.OrderPage;
+
 
 import java.time.Duration;
 
@@ -19,6 +21,7 @@ import java.time.Duration;
 public class BaseTest {
     protected WebDriver driver;
     protected HomePage homePage;
+    protected OrderPage orderPage;
     private final String browser;
 
     public BaseTest(String browser) {
@@ -47,8 +50,8 @@ public class BaseTest {
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
         homePage = new HomePage(driver);
         homePage.open();
-        homePage.scrollDownEnd();
         homePage.clickCookieButton();
+        orderPage = new OrderPage(driver);
     }
 
     @After

@@ -16,6 +16,12 @@ public class FaqPageAnswersTest extends BaseTest {
             this.expectedAnswer = expectedAnswer;
         }
 
+        @Before
+        public void setUp() {
+            super.setUp();
+            homePage.scrollDownEnd();
+        }
+
         @Parameterized.Parameters
         public static Object[][] getAnswer() {
             return new Object[][] {
