@@ -20,7 +20,7 @@ public class OrderPage {
     private static final By inputMetro = By.cssSelector("input[placeholder=\"* Станция метро\"]");
     private static final By inputPhone = By.cssSelector("input[placeholder=\"* Телефон: на него позвонит курьер\"]");
     static final By NEXT_BUTTON = By.cssSelector("button.Button_Button__ra12g.Button_Middle__1CSJM");//кнопка "Далее"
-    private static final By inputDate = By.cssSelector("input[placeholder=\"* Когда привезти самокат\"]");
+    private static final By inputDate = By.xpath("//input[@placeholder='* Когда привезти самокат']");
     private static final By inputRentalTime = By.cssSelector("div.Dropdown-control[aria-haspopup='listbox']");
     private static final String DROPDOWN_OPTION_XPATH = "//div[@class='Dropdown-option' and normalize-space()='%s']";
     private static final By inputColorScooter1 = By.id("black");
@@ -28,7 +28,7 @@ public class OrderPage {
     private static final By inputComment = By.xpath(".//input[@placeholder='Комментарий для курьера']");
     static final By ORDER_BUTTON_RENT = By.xpath(".//div[3]/button[2]");//кнопка "Заказать" на втором шаге формы
     static final By ORDER_BUTTON_YES = By.xpath("//*[@id='root']//button[contains(text(), 'Да')]");//кнопка "Да"
-    private static final By FINAL_ORDER_STATUS = By.className("Order_ModalHeader__3FDaJ");//финальный статус заказа
+    private static final By FINAL_ORDER_STATUS = By.xpath("//div[@class='Order_ModalHeader__3FDaJ']");//финальный статус заказа
     static final By FINAL_ORDER_BUTTON = By.xpath(".//div[2]/button[@class='Button_Button__ra12g Button_Middle__1CSJM']");//кнопка "Посмотреть статус"
 
 
@@ -187,13 +187,15 @@ public class OrderPage {
         WebDriverWait wait = new WebDriverWait(this.driver, Duration.ofSeconds(10));
 
         try {
-            WebElement statusElement = wait.until(ExpectedConditions.visibilityOfElementLocated(FINAL_ORDER_STATUS));
-            String statusText = statusElement.getText();
-            if (statusText.contains("Заказ оформлен")) {
-                return statusText;
+            WebElement modalHeader = wait.until(ExpectedConditions.visibilityOfElementLocated(FINAL_ORDER_STATUS));
+
+            String fullText = modalHeader.getText();
+            String firstLine = fullText.split("\n")[0];
+
+            if (firstLine.equals("Заказ оформлен")) {
+                return "Заказ оформлен";
             } else {
-                System.out.println("Статус заказа не соответствует ожидаемому" + statusText);
-                return "Статус не соответствует ожидаемому: " + statusText;
+                return "Статус не соответствует ожидаемому: " + firstLine;
             }
         } catch (TimeoutException e) {
             System.out.println("Ошибка: Модальное окно не найдено");
