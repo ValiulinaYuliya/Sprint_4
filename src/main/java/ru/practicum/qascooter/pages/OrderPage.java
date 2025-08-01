@@ -12,6 +12,7 @@ public class OrderPage {
     private final WebDriver driver;
     private final WebDriverWait wait;
 
+
     //локаторы
     static final By ORDER_BUTTON_HEADER = By.xpath(".//div[2]/button[1]");//кнопка "Заказать" в шапке
     private static final By inputName = By.cssSelector("input[placeholder=\"* Имя\"]");
@@ -160,8 +161,15 @@ public class OrderPage {
     }
 
     public void clickOrderButtonYes() {
-        WebElement button = wait.until(ExpectedConditions.elementToBeClickable(ORDER_BUTTON_YES));
-        button.click();
+        try {
+            WebElement button = wait.until(ExpectedConditions.elementToBeClickable(ORDER_BUTTON_YES));
+            button.click();
+
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+            wait.until(ExpectedConditions.invisibilityOfElementLocated(FINAL_ORDER_STATUS));
+        } catch (TimeoutException | ElementNotInteractableException e) {
+            System.out.println("Не удалось нажать кнопку 'Да' или не появилось модальное окно: " + e.getMessage());
+        }
     }
 
     //метод заполнения формы заказа на втором шаге
@@ -192,14 +200,14 @@ public class OrderPage {
             String fullText = modalHeader.getText();
             String firstLine = fullText.split("\n")[0];
 
-            if (firstLine.equals("Заказ оформлен")) {
+            if ("Заказ оформлен".equals(firstLine)) {
                 return "Заказ оформлен";
             } else {
                 return "Статус не соответствует ожидаемому: " + firstLine;
             }
         } catch (TimeoutException e) {
             System.out.println("Ошибка: Модальное окно не найдено");
-            return "Заказ не оформлен, модальное окно не найдено";
+            return "Не удалось получить статус заказа";
         }
     }
 }

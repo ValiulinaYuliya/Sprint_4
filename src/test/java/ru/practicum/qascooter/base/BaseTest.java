@@ -61,4 +61,8 @@ public class BaseTest {
         }
     }
 
+    public String getBrowser() {
+        return browser;
+    }
+
 }
