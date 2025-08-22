@@ -9,6 +9,8 @@ target/
 .idea
 .gigaide
 .idea/modules.xml
+.gigaide/
+.idea/
 .idea/jarRepositories.xml
 .idea/compiler.xml
 .idea/libraries/
