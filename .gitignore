@@ -3,7 +3,11 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
+
+
 ### IntelliJ IDEA ###
+.idea
+.gigaide
 .idea/modules.xml
 .gigaide/
 .idea/
@@ -37,4 +41,4 @@ build/
 .vscode/
 
 ### Mac OS ###
-.DS_Store
+.DS_Store.gigaide
